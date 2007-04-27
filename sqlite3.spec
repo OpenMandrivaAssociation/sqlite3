@@ -1,20 +1,16 @@
 %define realname sqlite
-%define name	sqlite3
-%define version 3.3.8
-%define release %mkrel 1
 
 %define	major 0
 %define libname	%mklibname %{name}_ %{major}
 
 Summary:	SQLite is a C library that implements an embeddable SQL database engine
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		sqlite3
+Version:	3.3.17
+Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
-Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.bz2
-Patch0:		sqlite-3.2.2-aliasing-fixes.patch
+Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
 BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
@@ -110,8 +106,8 @@ which serves as an example of how to use the SQLite library.
 This package contains tcl binding for %{name}.
 
 %prep
+
 %setup -q -n %{realname}-%{version}
-%patch0 -p1 -b .aliasing-fixes
 
 %build
 #%define __libtoolize true
@@ -122,7 +118,9 @@ export CXXFLAGS="${CXXFLAGS:-%optflags} -DNDEBUG=1"
 export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1"
 
 %configure2_5x \
-    --enable-utf8
+    --enable-utf8 \
+    --enable-threadsafe \
+    --enable-threads-override-locks
 
 %make
 make doc
@@ -176,6 +174,3 @@ rm -rf %{buildroot}
 %files -n tcl-%{name}
 %defattr(-,root,root)
 %{_prefix}/lib/tcl*/sqlite3
-
-
-
