@@ -11,6 +11,7 @@ License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
+Patch0:     sqlite3-disable-tcl-build-doc.patch
 BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
@@ -108,9 +109,11 @@ This package contains tcl binding for %{name}.
 %prep
 
 %setup -q -n %{realname}-%{version}
+%patch -p0 -b .tcl-b-doc
 
 %build
 #%define __libtoolize true
+
 %serverbuild
 
 export CFLAGS="${CFLAGS:-%optflags} -DNDEBUG=1"
@@ -123,6 +126,7 @@ export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1"
     --enable-threads-override-locks
 
 %make
+
 make doc
 
 %check
