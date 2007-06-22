@@ -2,11 +2,13 @@
 
 %define	major 0
 %define libname	%mklibname %{name}_ %{major}
+%define develname	%mklibname %{name} -d
+%define staticdevelname	%mklibname %{name} -d -s
 
 Summary:	SQLite is a C library that implements an embeddable SQL database engine
 Name:		sqlite3
 Version:	3.3.17
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -40,14 +42,15 @@ which serves as an example of how to use the SQLite library.
 
 This package contains the shared libraries for %{name}
 
-%package -n	%{libname}-devel
+%package -n	%develname
 Summary:	Development library and header files for the %{name} library
 Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
 Provides:	lib%{name}-devel
 Provides:	%{name}-devel
+Obsoletes: %mklibname %{name}_ %{major} -d
 
-%description -n	%{libname}-devel
+%description -n	%develname
 SQLite is a C library that implements an embeddable SQL database
 engine. Programs that link with the SQLite library can have SQL
 database access without running a separate RDBMS process. The
@@ -58,14 +61,15 @@ which serves as an example of how to use the SQLite library.
 This package contains the static %{libname} library and its header
 files.
 
-%package -n	%{libname}-static-devel
+%package -n	%staticdevelname
 Summary:	Static development library for the %{name} library
 Group:		Development/C
-Requires:	%{libname}-devel = %{version}-%{release}
+Requires:	%develname = %{version}-%{release}
 Provides:	lib%{name}-static-devel = %{version}-%{release}
 Provides:	%{name}-static-devel = %{version}-%{release}
+Obsoletes: %mklibname %{name}_ %{major} -d -s
 
-%description -n	%{libname}-static-devel
+%description -n	%staticdevelname
 SQLite is a C library that implements an embeddable SQL database
 engine. Programs that link with the SQLite library can have SQL
 database access without running a separate RDBMS process. The
@@ -158,7 +162,7 @@ rm -rf %{buildroot}
 %doc README
 %{_libdir}/lib*.so.*
 
-%files -n %{libname}-devel
+%files -n %develname
 %defattr(-,root,root)
 %doc doc/*.html doc/*.gif doc/*.pdf
 %{_includedir}/*.h
@@ -166,7 +170,7 @@ rm -rf %{buildroot}
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*.pc
 
-%files -n %{libname}-static-devel
+%files -n %staticdevelname
 %defattr(-,root,root)
 %{_libdir}/lib*.a
 
