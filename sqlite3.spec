@@ -8,7 +8,7 @@
 Summary:	SQLite is a C library that implements an embeddable SQL database engine
 Name:		sqlite3
 Version:	3.3.17
-Release:	%mkrel 4
+Release:	%mkrel 5
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -165,10 +165,10 @@ rm -rf %{buildroot}
 %files -n %develname
 %defattr(-,root,root)
 %doc doc/*.html doc/*.gif doc/*.pdf
-%{_includedir}/*.h
+%attr(0644,-,-) %{_includedir}/*.h
 %{_libdir}/lib*.la
 %{_libdir}/lib*.so
-%{_libdir}/pkgconfig/*.pc
+%attr(0644,-,-) %{_libdir}/pkgconfig/*.pc
 
 %files -n %staticdevelname
 %defattr(-,root,root)
