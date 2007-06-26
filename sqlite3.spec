@@ -165,10 +165,10 @@ rm -rf %{buildroot}
 %files -n %develname
 %defattr(-,root,root)
 %doc doc/*.html doc/*.gif doc/*.pdf
-%attr(0644,-,-) %{_includedir}/*.h
+%attr(0644,root,root) %{_includedir}/*.h
 %{_libdir}/lib*.la
 %{_libdir}/lib*.so
-%attr(0644,-,-) %{_libdir}/pkgconfig/*.pc
+%attr(0644,root,root) %{_libdir}/pkgconfig/*.pc
 
 %files -n %staticdevelname
 %defattr(-,root,root)
