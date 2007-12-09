@@ -15,7 +15,7 @@ URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
 Patch0:     sqlite3-disable-tcl-build-doc.patch
 BuildRequires:	chrpath
-BuildRequires:	libncursesw-devel
+BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
 BuildRequires:	tcl-devel tcl
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
