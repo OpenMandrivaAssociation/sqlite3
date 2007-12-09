@@ -7,7 +7,7 @@
 
 Summary:	SQLite is a C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.5.2
+Version:	3.5.3
 Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
@@ -15,7 +15,7 @@ URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
 Patch0:     sqlite3-disable-tcl-build-doc.patch
 BuildRequires:	chrpath
-BuildRequires:	ncurses-devel
+BuildRequires:	libncursesw-devel
 BuildRequires:	readline-devel
 BuildRequires:	tcl-devel tcl
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -113,7 +113,7 @@ This package contains tcl binding for %{name}.
 %prep
 
 %setup -q -n %{realname}-%{version}
-%patch -p0 -b .tcl-b-doc
+#%patch -p0 -b .tcl-b-doc
 
 %build
 #%define __libtoolize true
@@ -164,7 +164,7 @@ rm -rf %{buildroot}
 
 %files -n %develname
 %defattr(-,root,root)
-%doc doc/*.html doc/*.gif doc/*.pdf
+%doc doc/*.html 
 %attr(0644,root,root) %{_includedir}/*.h
 %{_libdir}/lib*.la
 %{_libdir}/lib*.so
