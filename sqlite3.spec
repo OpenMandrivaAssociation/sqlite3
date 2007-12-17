@@ -18,7 +18,6 @@ BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
 BuildRequires:	tcl-devel tcl
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 SQLite is a C library that implements an embeddable SQL database
