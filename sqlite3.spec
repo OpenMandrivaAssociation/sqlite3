@@ -7,7 +7,7 @@
 
 Summary:	SQLite is a C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.5.4
+Version:	3.5.6
 Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
