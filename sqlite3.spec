@@ -5,7 +5,7 @@
 %define develname	%mklibname %{name} -d
 %define staticdevelname	%mklibname %{name} -d -s
 
-Summary:	SQLite is a C library that implements an embeddable SQL database engine
+Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
 Version:	3.5.6
 Release:	%mkrel 1
@@ -29,7 +29,7 @@ distribution comes with a standalone command-line access program
 which serves as an example of how to use the SQLite library.
 
 %package -n	%{libname}
-Summary:	SQLite is a C library that implements an embeddable SQL database engine
+Summary:	C library that implements an embeddable SQL database engine
 Group:          System/Libraries
 
 %description -n	%{libname}
