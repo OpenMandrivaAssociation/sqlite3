@@ -7,7 +7,7 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.5.7
+Version:	3.5.9
 Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
@@ -120,9 +120,9 @@ This package contains tcl binding for %{name}.
 
 %serverbuild
 
-export CFLAGS="${CFLAGS:-%optflags} -DNDEBUG=1"
-export CXXFLAGS="${CXXFLAGS:-%optflags} -DNDEBUG=1"
-export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1"
+export CFLAGS="${CFLAGS:-%optflags} -DNDEBUG=1 -ltcl -pthread"
+export CXXFLAGS="${CXXFLAGS:-%optflags} -DNDEBUG=1 -ltcl -pthread"
+export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1 -ltcl -pthread"
 
 %configure2_5x \
     --enable-utf8 \
