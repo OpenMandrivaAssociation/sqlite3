@@ -8,12 +8,18 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
 Version:	3.5.9
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
 Patch0:     sqlite3-disable-tcl-build-doc.patch
+# from fedora:
+Patch1:		sqlite-3.5.8-pkgconfig-version.patch
+# this is a module, no major:
+Patch2:		sqlite-3.5.9-fix-linking-tcl-module.patch
+# tcl module wants the full release version (eg: 3.5.9), not the short version (eg: 3.5)
+Patch3:		sqlite-3.5.9-fix-tcl-version.patch
 BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
@@ -99,6 +105,7 @@ This package contains command line tools for managing the
 Summary:	Tcl binding for %{name}
 Group:		Databases
 Provides:	%{name}-tcl
+Requires:	%{libname} = %{version}-%{release}
 
 %description -n	tcl-%{name}
 SQLite is a C library that implements an embeddable SQL database
@@ -114,15 +121,18 @@ This package contains tcl binding for %{name}.
 
 %setup -q -n %{realname}-%{version}
 #%patch -p0 -b .tcl-b-doc
+%patch1 -p1 -b .pkgconf
+%patch2 -p1
+%patch3 -p1
 
 %build
 #%define __libtoolize true
 
 %serverbuild
 
-export CFLAGS="${CFLAGS:-%optflags} -DNDEBUG=1 -ltcl -pthread"
-export CXXFLAGS="${CXXFLAGS:-%optflags} -DNDEBUG=1 -ltcl -pthread"
-export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1 -ltcl -pthread"
+export CFLAGS="${CFLAGS:-%optflags} -DNDEBUG=1"
+export CXXFLAGS="${CXXFLAGS:-%optflags} -DNDEBUG=1"
+export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1"
 
 %configure2_5x \
     --enable-utf8 \
