@@ -7,8 +7,8 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.5.9
-Release:	%mkrel 2
+Version:	3.6.0
+Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -120,14 +120,11 @@ This package contains tcl binding for %{name}.
 %prep
 
 %setup -q -n %{realname}-%{version}
-#%patch -p0 -b .tcl-b-doc
 %patch1 -p1 -b .pkgconf
 %patch2 -p1
 %patch3 -p1
 
 %build
-#%define __libtoolize true
-
 %serverbuild
 
 export CFLAGS="${CFLAGS:-%optflags} -DNDEBUG=1"
@@ -178,7 +175,6 @@ rm -rf %{buildroot}
 
 %files -n %develname
 %defattr(-,root,root)
-%doc doc/*.html 
 %attr(0644,root,root) %{_includedir}/*.h
 %{_libdir}/lib*.la
 %{_libdir}/lib*.so
