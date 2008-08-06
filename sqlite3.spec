@@ -7,7 +7,7 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.6.0
+Version:	3.6.1
 Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
@@ -141,7 +141,7 @@ export FFLAGS="${FFLAGS:-%optflags} -DNDEBUG=1"
 make doc
 
 %check
-#make test
+make test
 
 %install
 rm -rf %{buildroot}
