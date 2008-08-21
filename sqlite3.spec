@@ -8,18 +8,19 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
 Version:	3.6.1
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
-Patch0:     sqlite3-disable-tcl-build-doc.patch
+Patch0:		sqlite3-disable-tcl-build-doc.patch
 # from fedora:
 Patch1:		sqlite-3.5.8-pkgconfig-version.patch
 # this is a module, no major:
 Patch2:		sqlite-3.5.9-fix-linking-tcl-module.patch
 # tcl module wants the full release version (eg: 3.5.9), not the short version (eg: 3.5)
 Patch3:		sqlite-3.5.9-fix-tcl-version.patch
+Patch4:		sqlite-lemon-snprintf.diff
 BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
@@ -117,12 +118,27 @@ which serves as an example of how to use the SQLite library.
 
 This package contains tcl binding for %{name}.
 
+%package -n	lemon
+Summary:	The Lemon Parser Generator
+Group:		Development/Other
+
+%description -n	lemon
+Lemon is an LALR(1) parser generator for C or C++. It does the same job as
+bison and yacc. But lemon is not another bison or yacc clone. It uses a
+different grammar syntax which is designed to reduce the number of coding
+errors. Lemon also uses a more sophisticated parsing engine that is faster than
+yacc and bison and which is both reentrant and thread-safe. Furthermore, Lemon
+implements features that can be used to eliminate resource leaks, making is
+suitable for use in long-running programs such as graphical user interfaces or
+embedded controllers.
+
 %prep
 
 %setup -q -n %{realname}-%{version}
 %patch1 -p1 -b .pkgconf
 %patch2 -p1
 %patch3 -p1
+%patch4 -p0
 
 %build
 %serverbuild
@@ -155,6 +171,8 @@ install -d %{buildroot}%{_mandir}/man1
 
 install -m644 sqlite3.1 %{buildroot}%{_mandir}/man1/%name.1
 
+install -m0755 lemon %{buildroot}%{_bindir}/
+
 chrpath -d %{buildroot}%{_bindir}/*
 
 %if %mdkversion < 200900
@@ -186,9 +204,14 @@ rm -rf %{buildroot}
 
 %files tools
 %defattr(-,root,root)
-%{_bindir}/*
+%{_bindir}/sqlite3
 %{_mandir}/man1/*
 
 %files -n tcl-%{name}
 %defattr(-,root,root)
 %{_prefix}/lib/tcl*/sqlite3
+
+%files -n lemon
+%defattr(-,root,root)
+%doc lempar.c
+%{_bindir}/lemon
