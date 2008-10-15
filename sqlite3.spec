@@ -7,19 +7,15 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.6.1
-Release:	%mkrel 3
+Version:	3.6.4
+Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
 Patch0:		sqlite3-disable-tcl-build-doc.patch
-# from fedora:
-Patch1:		sqlite-3.5.8-pkgconfig-version.patch
 # this is a module, no major:
-Patch2:		sqlite-3.5.9-fix-linking-tcl-module.patch
-# tcl module wants the full release version (eg: 3.5.9), not the short version (eg: 3.5)
-Patch3:		sqlite-3.5.9-fix-tcl-version.patch
+Patch0:		sqlite-3.5.9-fix-linking-tcl-module.patch
 BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
@@ -134,9 +130,7 @@ embedded controllers.
 %prep
 
 %setup -q -n %{realname}-%{version}
-%patch1 -p1 -b .pkgconf
-%patch2 -p1
-%patch3 -p1
+%patch0 -p1
 
 %build
 %serverbuild
