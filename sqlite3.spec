@@ -14,7 +14,7 @@ Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
 Patch0:		sqlite3-disable-tcl-build-doc.patch
-# Fix for Tcl 8.6 - AdamW 2008/12
+# Fix for Tcl 8.6 (interp->result usage, TIP #330) - AdamW 2008/12
 Patch1:		sqlite-3.6.6.2-tcl86.patch
 # this is a module, no major:
 Patch0:		sqlite-3.5.9-fix-linking-tcl-module.patch
