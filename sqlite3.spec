@@ -7,18 +7,12 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.6.9
+Version:	3.6.10
 Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
-# this is a module, no major:
-Patch0:		sqlite-3.6.8-fix-linking-tcl-module.patch
-# Fix for Tcl 8.6 (interp->result usage, TIP #330) - AdamW 2008/12
-Patch1:		sqlite-3.6.6.2-tcl86.patch
-Patch2:		sqlite-3.6.8-string-format.patch
-Patch3:		sqlite-3.6.6.2-lemon-snprintf.patch
 BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
@@ -133,10 +127,6 @@ embedded controllers.
 %prep
 
 %setup -q -n %{realname}-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 %build
 %serverbuild
