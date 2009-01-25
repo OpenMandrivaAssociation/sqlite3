@@ -176,7 +176,6 @@ rm -rf %{buildroot}
 
 %files -n %{libname}
 %defattr(-,root,root)
-%doc README
 %{_libdir}/lib*.so.%{major}*
 
 %files -n %develname
