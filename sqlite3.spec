@@ -8,7 +8,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
 Version:	3.6.18
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -18,6 +18,8 @@ BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
 BuildRequires:	tcl-devel tcl
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+
+Patch0:		sqlite-3.6.18-bookmarks.patch
 
 %description
 SQLite is a C library that implements an embeddable SQL database
@@ -126,6 +128,7 @@ embedded controllers.
 
 %prep
 %setup -q -n %{realname}-%{version}
+%patch0 -p1
 sed -i -e "s/3\.6\.13/%{version}/" configure
 
 %build
