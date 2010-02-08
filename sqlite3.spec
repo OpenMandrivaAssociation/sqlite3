@@ -8,7 +8,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
 Version:	3.6.22
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -134,7 +134,7 @@ sed -i -e "s/3\.6\.13/%{version}/" configure
 %build
 %serverbuild
 
-export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1"
+export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1 -DSQLITE_SECURE_DELETE=1"
 
 %configure2_5x \
     --enable-utf8 \
