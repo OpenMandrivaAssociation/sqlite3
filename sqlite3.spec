@@ -8,7 +8,7 @@
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
 Version:	3.6.23.1
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -198,7 +198,11 @@ rm -rf %{buildroot}
 
 %files -n tcl-%{name}
 %defattr(-,root,root)
+%if %mdkversion < 200910
+%{_prefix}/lib/tcl*/sqlite3
+%else
 %{tcl_sitelib}/sqlite3
+%endif
 
 %files -n lemon
 %defattr(-,root,root)
