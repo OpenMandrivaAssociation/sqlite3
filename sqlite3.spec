@@ -131,7 +131,6 @@ embedded controllers.
 %setup -q -n %{realname}-%{version}
 %patch0 -p1
 %patch1 -p1
-sed -i -e "s/3\.6\.13/%{version}/" configure
 
 %build
 %serverbuild
@@ -139,7 +138,7 @@ sed -i -e "s/3\.6\.13/%{version}/" configure
 export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
 
 #(tpg) needed for patch1
-autoconf
+autoreconf -fi
 
 %configure2_5x \
     --enable-threadsafe \
