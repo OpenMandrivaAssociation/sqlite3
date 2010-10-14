@@ -17,7 +17,6 @@ Patch0:		sqlite-3.6.18-bookmarks.patch
 Patch1:		sqlite-3.7.0.1-link-dl.patch
 # Support a system-wide lemon template
 Patch2:		sqlite-3.6.23-lemon-system-template.patch
-BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
 BuildRequires:	tcl-devel
@@ -32,7 +31,7 @@ distribution comes with a standalone command-line access program
 (sqlite) that can be used to administer an SQLite database and
 which serves as an example of how to use the SQLite library.
 
-%package -n %{libname}
+%package -n	%{libname}
 Summary:	C library that implements an embeddable SQL database engine
 Group:		System/Libraries
 
@@ -46,7 +45,7 @@ which serves as an example of how to use the SQLite library.
 
 This package contains the shared libraries for %{name}
 
-%package -n %{develname}
+%package -n	%{develname}
 Summary:	Development library and header files for the %{name} library
 Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
@@ -65,7 +64,7 @@ which serves as an example of how to use the SQLite library.
 This package contains the static %{libname} library and its header
 files.
 
-%package -n %{staticdevelname}
+%package -n	%{staticdevelname}
 Summary:	Static development library for the %{name} library
 Group:		Development/C
 Requires:	%{develname} = %{version}-%{release}
@@ -83,12 +82,12 @@ which serves as an example of how to use the SQLite library.
 
 This package contains the static %{libname} library.
 
-%package tools
+%package	tools
 Summary:	Command line tools for managing the %{libname} library
 Group:		Databases
 Requires:	%{libname} = %{version}-%{release}
 
-%description tools
+%description	tools
 SQLite is a C library that implements an embeddable SQL database
 engine. Programs that link with the SQLite library can have SQL
 database access without running a separate RDBMS process. The
@@ -99,7 +98,7 @@ which serves as an example of how to use the SQLite library.
 This package contains command line tools for managing the
 %{libname} library.
 
-%package -n tcl-%{name}
+%package -n	tcl-%{name}
 Summary:	Tcl binding for %{name}
 Group:		Databases
 Provides:	%{name}-tcl
@@ -115,7 +114,7 @@ which serves as an example of how to use the SQLite library.
 
 This package contains tcl binding for %{name}.
 
-%package -n lemon
+%package -n	lemon
 Summary:	The Lemon Parser Generator
 Group:		Development/Other
 
@@ -135,18 +134,20 @@ embedded controllers.
 %patch1 -p1
 %patch2 -p1 -b .lemon-system-template~
 
+#(tpg) needed for patch1
+autoreconf -fi
+
 %build
 %serverbuild
 
 export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
 
-#(tpg) needed for patch1
-autoreconf -fi
-
-%configure2_5x \
-    --enable-threadsafe \
-    --enable-threads-override-locks \
-    --enable-load-extension
+%configure2_5x	--enable-threadsafe \
+		--enable-threads-override-locks \
+		--enable-load-extension
+# rpath removal
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 %make
 
@@ -159,26 +160,11 @@ make doc
 %install
 rm -rf %{buildroot}
 
-install -d %{buildroot}%{_bindir}
-install -d %{buildroot}%{_includedir}
-install -d %{buildroot}%{_libdir}
-install -d %{buildroot}%{_mandir}/man1
-
 %makeinstall_std
 
-install -m644 sqlite3.1 %{buildroot}%{_mandir}/man1/%name.1
+install -m644 sqlite3.1 -D %{buildroot}%{_mandir}/man1/sqlite3.1
 
-install -m0755 lemon %{buildroot}%{_bindir}/
-
-chrpath -d %{buildroot}%{_bindir}/*
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
+install -m755 lemon -D %{buildroot}%{_bindir}/lemon
 
 %clean
 rm -rf %{buildroot}
