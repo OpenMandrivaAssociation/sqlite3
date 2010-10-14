@@ -15,6 +15,8 @@ URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
 Patch0:		sqlite-3.6.18-bookmarks.patch
 Patch1:		sqlite-3.7.0.1-link-dl.patch
+# Support a system-wide lemon template
+Patch2:		sqlite-3.6.23-lemon-system-template.patch
 BuildRequires:	chrpath
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
@@ -131,6 +133,7 @@ embedded controllers.
 %setup -q -n %{realname}-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1 -b .lemon-system-template~
 
 %build
 %serverbuild
