@@ -1,4 +1,6 @@
 %define realname sqlite
+%define realver 3070400
+%define rpmver %(echo %{realver}|sed -e "s/00//g" -e "s/0/./g")
 
 %define	major 0
 %define libname	%mklibname %{name}_ %{major}
@@ -7,20 +9,14 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.7.3
+Version:	%rpmver
 Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
-Source0:	http://www.sqlite.org/%{realname}-%{version}.tar.gz
-Patch0:		sqlite-3.6.18-bookmarks.patch
-Patch1:		sqlite-3.7.0.1-link-dl.patch
-# Support a system-wide lemon template
-Patch2:		sqlite-3.6.23-lemon-system-template.patch
+Source0:	http://www.sqlite.org/%{realname}-autoconf-%{realver}.tar.gz
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
-BuildRequires:	tcl-devel
-BuildRequires:	tcl
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -98,44 +94,8 @@ which serves as an example of how to use the SQLite library.
 This package contains command line tools for managing the
 %{libname} library.
 
-%package -n	tcl-%{name}
-Summary:	Tcl binding for %{name}
-Group:		Databases
-Provides:	%{name}-tcl
-Requires:	%{libname} = %{version}-%{release}
-
-%description -n	tcl-%{name}
-SQLite is a C library that implements an embeddable SQL database
-engine. Programs that link with the SQLite library can have SQL
-database access without running a separate RDBMS process. The
-distribution comes with a standalone command-line access program
-(sqlite) that can be used to administer an SQLite database and
-which serves as an example of how to use the SQLite library.
-
-This package contains tcl binding for %{name}.
-
-%package -n	lemon
-Summary:	The Lemon Parser Generator
-Group:		Development/Other
-
-%description -n	lemon
-Lemon is an LALR(1) parser generator for C or C++. It does the same job as
-bison and yacc. But lemon is not another bison or yacc clone. It uses a
-different grammar syntax which is designed to reduce the number of coding
-errors. Lemon also uses a more sophisticated parsing engine that is faster than
-yacc and bison and which is both reentrant and thread-safe. Furthermore, Lemon
-implements features that can be used to eliminate resource leaks, making is
-suitable for use in long-running programs such as graphical user interfaces or
-embedded controllers.
-
 %prep
-%setup -q -n %{realname}-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1 -b .lemon-system-template~
-
-#(tpg) needed for patch1
-autoreconf -fi
+%setup -q -n %{realname}-autoconf-%{realver}
 
 %build
 %serverbuild
@@ -143,28 +103,16 @@ autoreconf -fi
 export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
 
 %configure2_5x	--enable-threadsafe \
-		--enable-threads-override-locks \
-		--enable-load-extension
+	--enable-dynamic-extensions
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 %make
 
-make doc
-
-%check
-# Disabled in 3.6.16 because of http://www.sqlite.org/cvstrac/tktview?tn=3951,39
-#make test
-
 %install
 rm -rf %{buildroot}
-
 %makeinstall_std
-
-install -m644 sqlite3.1 -D %{buildroot}%{_mandir}/man1/sqlite3.1
-
-install -m755 lemon -D %{buildroot}%{_bindir}/lemon
 
 %clean
 rm -rf %{buildroot}
@@ -188,16 +136,3 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_bindir}/sqlite3
 %{_mandir}/man1/*
-
-%files -n tcl-%{name}
-%defattr(-,root,root)
-%if %mdkversion < 200910
-%{_prefix}/lib/tcl*/sqlite3
-%else
-%{tcl_sitelib}/sqlite3
-%endif
-
-%files -n lemon
-%defattr(-,root,root)
-%doc lempar.c
-%{_bindir}/lemon
