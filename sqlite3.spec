@@ -1,5 +1,5 @@
 %define realname sqlite
-%define realver 3070400
+%define realver 3070500
 %define rpmver %(echo %{realver}|sed -e "s/00//g" -e "s/0/./g")
 
 %define	major 0
