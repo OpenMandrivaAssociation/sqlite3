@@ -9,7 +9,7 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	%rpmver
+Version:	3.7.6.3
 Release:	%mkrel 1
 License:	Public Domain
 Group:		System/Libraries
