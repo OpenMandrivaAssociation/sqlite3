@@ -3,21 +3,19 @@
 %define rpmver %(echo %{realver}|sed -e "s/00//g" -e "s/0/./g")
 
 %define	major 0
-%define libname	%mklibname %{name}_ %{major}
-%define develname	%mklibname %{name} -d
-%define staticdevelname	%mklibname %{name} -d -s
+%define libname %mklibname %{name}_ %{major}
+%define develname %mklibname %{name} -d
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
 Version:	3.7.9
-Release:	%mkrel 1
+Release:	2
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
 Source0:	http://www.sqlite.org/%{realname}-autoconf-%{realver}.tar.gz
 BuildRequires:	ncurses-devel
 BuildRequires:	readline-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 SQLite is a C library that implements an embeddable SQL database
@@ -44,7 +42,7 @@ This package contains the shared libraries for %{name}
 %package -n	%{develname}
 Summary:	Development library and header files for the %{name} library
 Group:		Development/C
-Requires:	%{libname} = %{version}-%{release}
+Requires:	%{libname} >= %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	%mklibname %{name}_ %{major} -d
@@ -60,28 +58,10 @@ which serves as an example of how to use the SQLite library.
 This package contains the static %{libname} library and its header
 files.
 
-%package -n	%{staticdevelname}
-Summary:	Static development library for the %{name} library
-Group:		Development/C
-Requires:	%{develname} = %{version}-%{release}
-Provides:	lib%{name}-static-devel = %{version}-%{release}
-Provides:	%{name}-static-devel = %{version}-%{release}
-Obsoletes:	%mklibname %{name}_ %{major} -d -s
-
-%description -n	%{staticdevelname}
-SQLite is a C library that implements an embeddable SQL database
-engine. Programs that link with the SQLite library can have SQL
-database access without running a separate RDBMS process. The
-distribution comes with a standalone command-line access program
-(sqlite) that can be used to administer an SQLite database and
-which serves as an example of how to use the SQLite library.
-
-This package contains the static %{libname} library.
-
 %package	tools
 Summary:	Command line tools for managing the %{libname} library
 Group:		Databases
-Requires:	%{libname} = %{version}-%{release}
+Requires:	%{libname} >= %{version}-%{release}
 
 %description	tools
 SQLite is a C library that implements an embeddable SQL database
@@ -112,27 +92,20 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 %install
 rm -rf %{buildroot}
+
 %makeinstall_std
 
-%clean
-rm -rf %{buildroot}
+# cleanup
+rm -f %{buildroot}%{_libdir}/*.*a
 
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/lib*.so.%{major}*
 
 %files -n %{develname}
-%defattr(-,root,root)
 %attr(0644,root,root) %{_includedir}/*.h
-%{_libdir}/lib*.la
 %{_libdir}/lib*.so
 %attr(0644,root,root) %{_libdir}/pkgconfig/*.pc
 
-%files -n %{staticdevelname}
-%defattr(-,root,root)
-%{_libdir}/lib*.a
-
 %files tools
-%defattr(-,root,root)
 %{_bindir}/sqlite3
 %{_mandir}/man1/*
