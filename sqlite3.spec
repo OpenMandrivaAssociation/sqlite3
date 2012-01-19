@@ -1,5 +1,5 @@
 %define realname sqlite
-%define realver 3070900
+%define realver 3071000
 %define rpmver %(echo %{realver}|sed -e "s/00//g" -e "s/0/./g")
 
 %define	major 0
@@ -8,8 +8,8 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.7.9
-Release:	2
+Version:	3.7.10
+Release:	1
 License:	Public Domain
 Group:		System/Libraries
 URL:		http://www.sqlite.org/
@@ -43,7 +43,6 @@ This package contains the shared libraries for %{name}
 Summary:	Development library and header files for the %{name} library
 Group:		Development/C
 Requires:	%{libname} >= %{version}-%{release}
-Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	%mklibname %{name}_ %{major} -d
 
@@ -75,12 +74,14 @@ This package contains command line tools for managing the
 %{libname} library.
 
 %prep
-%setup -q -n %{realname}-autoconf-%{realver}
+%setup -qn %{realname}-autoconf-%{realver}
 
 %build
 export CFLAGS="${CFLAGS:-%optflags} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_FTS3=3 -DSQLITE_ENABLE_RTREE=1 -Wall -DNDEBUG=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
 
-%configure2_5x	--enable-threadsafe \
+%configure2_5x \
+	--disable-static \
+	--enable-threadsafe \
 	--enable-dynamic-extensions
 # rpath removal
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -90,11 +91,10 @@ sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 %install
 rm -rf %{buildroot}
-
 %makeinstall_std
 
 # cleanup
-rm -f %{buildroot}%{_libdir}/*.*a
+find %{buildroot} -type f -name "*.la" -exec rm -f {} ';'
 
 %files -n %{libname}
 %{_libdir}/lib*.so.%{major}*
