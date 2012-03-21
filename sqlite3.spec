@@ -1,5 +1,5 @@
 %define realname sqlite
-%define realver 3071000
+%define realver 3071100
 %define rpmver %(echo %{realver}|sed -e "s/00//g" -e "s/0/./g")
 
 %define	major 0
@@ -8,7 +8,7 @@
 
 Summary:	C library that implements an embeddable SQL database engine
 Name:		sqlite3
-Version:	3.7.10
+Version:	3.7.11
 Release:	1
 License:	Public Domain
 Group:		System/Libraries
