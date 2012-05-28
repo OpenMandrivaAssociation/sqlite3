@@ -1,5 +1,5 @@
 %define realname sqlite
-%define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)%(echo %version |cut -d. -f3)00
+%define realver %(echo %version |cut -d. -f1)0%(echo %version |cut -d. -f2)%(echo %version |cut -d. -f3)01
 
 %define	major 0
 %define libname %mklibname %{name}_ %{major}
