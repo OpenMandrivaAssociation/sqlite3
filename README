@@ -1,0 +1,3 @@
+The sqlite3 package has been renamed to sqlite.
+The old sqlite package is now called sqlite2 and
+moved off to contrib.
